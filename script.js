@@ -2,6 +2,15 @@
 (() => {
   const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
+  /* ---------- vidéo : repli sur le poster si l'autoplay est bloqué ---------- */
+  document.querySelectorAll("video").forEach((v) => {
+    v.addEventListener("error", () => v.classList.add("video-failed"), { once: true });
+    const p = v.play();
+    if (p && typeof p.catch === "function") {
+      p.catch(() => v.classList.add("video-failed"));
+    }
+  });
+
   /* ---------- entrées au scroll ---------- */
   const revealTargets = [
     ...document.querySelectorAll(".tiles > .tile"),
